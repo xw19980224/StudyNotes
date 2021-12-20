@@ -44,3 +44,4 @@ atlassian-ide-plugin.xml
 
 # VS Code
 .vscode/
+/gradle/wrapper/gradle-7.3-bin.zip

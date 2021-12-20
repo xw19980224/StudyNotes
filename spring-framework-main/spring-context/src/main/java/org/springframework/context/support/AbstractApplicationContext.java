@@ -330,9 +330,15 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * <p>If none specified, a default environment will be initialized via
 	 * {@link #createEnvironment()}.
 	 */
+
+	/*
+	以可配置的形式返回此应用程序上下文的Environment ，允许进一步自定义。
+	如果没有指定，默认环境将通过createEnvironment()初始化。
+	 */
 	@Override
 	public ConfigurableEnvironment getEnvironment() {
 		if (this.environment == null) {
+			// new StandardEnvironment()
 			this.environment = createEnvironment();
 		}
 		return this.environment;
@@ -660,10 +666,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+		// 初始化任何占位符属性来源在上下文环境中。默认什么都不做，由子类实现
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
+		// 验证所需的所有属性标记为可解析
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...
@@ -1371,6 +1379,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Return the internal bean factory of the parent context if it implements
 	 * ConfigurableApplicationContext; else, return the parent context itself.
 	 * @see org.springframework.context.ConfigurableApplicationContext#getBeanFactory
+	 * 如果实现了 ConfigurableApplicationContext，则返回父上下文的内部 bean 工厂； 否则，返回父上下文本身。
 	 */
 	@Nullable
 	protected BeanFactory getInternalParentBeanFactory() {

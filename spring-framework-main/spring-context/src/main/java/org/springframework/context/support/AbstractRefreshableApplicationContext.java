@@ -53,7 +53,6 @@ import org.springframework.lang.Nullable;
  *
  * @author Juergen Hoeller
  * @author Chris Beams
- * @since 1.1.3
  * @see #loadBeanDefinitions
  * @see org.springframework.beans.factory.support.DefaultListableBeanFactory
  * @see org.springframework.web.context.support.AbstractRefreshableWebApplicationContext
@@ -70,7 +69,9 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	@Nullable
 	private Boolean allowCircularReferences;
 
-	/** Bean factory for this context. */
+	/**
+	 * Bean factory for this context.
+	 */
 	@Nullable
 	private volatile DefaultListableBeanFactory beanFactory;
 
@@ -124,13 +125,13 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 			closeBeanFactory();
 		}
 		try {
+			// new DefaultListableBeanFactory（getInternalParentBeanFactory()）
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
 			beanFactory.setSerializationId(getId());
 			customizeBeanFactory(beanFactory);
 			loadBeanDefinitions(beanFactory);
 			this.beanFactory = beanFactory;
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			throw new ApplicationContextException("I/O error parsing bean definition source for " + getDisplayName(), ex);
 		}
 	}
@@ -193,6 +194,16 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 * @see org.springframework.beans.factory.support.DefaultListableBeanFactory#setAllowCircularReferences
 	 * @see org.springframework.beans.factory.support.DefaultListableBeanFactory#setAllowRawInjectionDespiteWrapping
 	 */
+
+	/*
+	 为此上下文创建一个内部 bean 工厂。 为每次refresh()尝试调用。
+	 默认实现创建一个DefaultListableBeanFactory ，
+	 并将此上下文父级的内部 bean 工厂作为父 bean 工厂。
+	 可以在子类中覆盖，例如自定义 DefaultListableBeanFactory 的设置
+	 return: 为此上下文bean工厂
+
+	 getInternalParentBeanFactory():如果实现了 ConfigurableApplicationContext，则返回父上下文的内部 bean 工厂； 否则，返回父上下文本身。
+	 */
 	protected DefaultListableBeanFactory createBeanFactory() {
 		return new DefaultListableBeanFactory(getInternalParentBeanFactory());
 	}
@@ -211,10 +222,19 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 * @see DefaultListableBeanFactory#setAllowRawInjectionDespiteWrapping
 	 * @see DefaultListableBeanFactory#setAllowEagerClassLoading
 	 */
+
+	/*
+	自定义此上下文使用的内部bean工厂
+	为每次refresh（）尝试调用
+	如果指定，默认实现应用此上下文的“allowBeanDefinitionOverriding”和“allowCircularReferences”设置。
+	可以在子类中覆盖以自定义DefaultListableBeanFactory的任何设置.
+	 */
 	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
+		// this.allowBeanDefinitionOverriding:Boolean
 		if (this.allowBeanDefinitionOverriding != null) {
 			beanFactory.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
 		}
+		// this.allowCircularReferences:Boolean
 		if (this.allowCircularReferences != null) {
 			beanFactory.setAllowCircularReferences(this.allowCircularReferences);
 		}

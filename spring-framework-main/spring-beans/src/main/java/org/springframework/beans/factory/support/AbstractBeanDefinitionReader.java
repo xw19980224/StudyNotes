@@ -81,23 +81,43 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	 * @see #setResourceLoader
 	 * @see #setEnvironment
 	 */
+
+	/*
+	为给定的bean工厂创建一个abstractBeanDefinitionReader
+	如果传入的bean工厂不仅实现了BeanDefinitionRegistry接口，而且还实现了ResourceLoader接口。
+	它将会作为默认的ResourceLoader使用.
+	这通常是ApplicationContext实现的情况
+	如果给定一个普通的BeanDefinitionRegistry，
+	默认的ResourceLoader将会是一个PathMatchingResourcePatternResolver
+	如果传入的bean工厂也实现了EnvironmentCapable,那么这个读者将使用它的环境。
+	否则，阅读器将初始化并使用StandardEnvironment 。
+	所有 ApplicationContext 实现都是 EnvironmentCapable，而普通的 BeanFactory 实现则不是。
+	 */
 	protected AbstractBeanDefinitionReader(BeanDefinitionRegistry registry) {
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
+		// this.registry:BeanDefinitionRegistry
 		this.registry = registry;
 
 		// Determine ResourceLoader to use.
+		// 确定使用ResourceLoader
+		// 判断register是否是ResouceLoader接口的一个实例
 		if (this.registry instanceof ResourceLoader) {
 			this.resourceLoader = (ResourceLoader) this.registry;
 		}
 		else {
+			// this.resourceLoader:ResourceLoader
+			// new DefaultResourceLoader()
 			this.resourceLoader = new PathMatchingResourcePatternResolver();
 		}
 
 		// Inherit Environment if possible
+		// 判断registry是否为EnvironmentCapable的一个实例
 		if (this.registry instanceof EnvironmentCapable) {
 			this.environment = ((EnvironmentCapable) this.registry).getEnvironment();
 		}
 		else {
+			// this.environment:Environment
+			// new DefaultResourceLoader()
 			this.environment = new StandardEnvironment();
 		}
 	}
