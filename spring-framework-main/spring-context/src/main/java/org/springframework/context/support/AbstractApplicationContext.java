@@ -569,6 +569,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			/*
 				获取BeanFactory: 默认实现是DefaultListableBeanFactory
 				加载BeanDefition 并注册到 BeanDefitionRegistry
+				1、创建工厂
+				2、将xml中的bean信息读取，封装成BeanDefition，并且注册到BeanDefitionRegistry
 			 */
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
@@ -579,7 +581,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
-				// BeanFactory准备工作完成后进行的后置处理工作
+				// BeanFactory准备工作完成后进行的后置处理工作(未进行实现，用于子类拓展)
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
@@ -617,6 +619,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
+				// 完成context的刷新。主要是调用LifecycleProcessor的onRefresh()方法，并且发布事件（ContextRefreshedEvent）
 				finishRefresh();
 			}
 
@@ -671,7 +674,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
-		// 验证所需的所有属性标记为可解析
+		// 验证所有标记为必需的属性都是可解析的
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...
@@ -923,6 +926,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Finish the initialization of this context's bean factory,
 	 * initializing all remaining singleton beans.
 	 */
+
+	/*
+	完成此上下文的 bean 工厂的初始化，初始化所有剩余的单例 bean。
+	 */
 	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
 		// Initialize conversion service for this context.
 		if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) &&
@@ -934,11 +941,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Register a default embedded value resolver if no BeanFactoryPostProcessor
 		// (such as a PropertySourcesPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
+		// 如果之前没有注册任何 BeanFactoryPostProcessor（例如 PropertySourcesPlaceholderConfigurer bean），
+		// 则注册一个默认的嵌入值解析器：此时，主要用于注释属性值的解析。
 		if (!beanFactory.hasEmbeddedValueResolver()) {
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
 		}
 
 		// Initialize LoadTimeWeaverAware beans early to allow for registering their transformers early.
+		// 尽早初始化 LoadTimeWeaverAware bean 以允许尽早注册它们的转换器。
 		String[] weaverAwareNames = beanFactory.getBeanNamesForType(LoadTimeWeaverAware.class, false, false);
 		for (String weaverAwareName : weaverAwareNames) {
 			getBean(weaverAwareName);
@@ -1379,7 +1389,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Return the internal bean factory of the parent context if it implements
 	 * ConfigurableApplicationContext; else, return the parent context itself.
 	 * @see org.springframework.context.ConfigurableApplicationContext#getBeanFactory
-	 * 如果实现了 ConfigurableApplicationContext，则返回父上下文的内部 bean 工厂； 否则，返回父上下文本身。
+	 */
+
+	/*
+	如果实现了 ConfigurableApplicationContext，则返回父上下文的内部 bean 工厂； 否则，返回父上下文本身
 	 */
 	@Nullable
 	protected BeanFactory getInternalParentBeanFactory() {

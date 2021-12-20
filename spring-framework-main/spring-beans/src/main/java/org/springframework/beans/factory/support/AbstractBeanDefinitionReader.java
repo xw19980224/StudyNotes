@@ -150,6 +150,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	@Override
 	@Nullable
 	public ResourceLoader getResourceLoader() {
+		// this.resourceLoader:ResourceLoader
 		return this.resourceLoader;
 	}
 
@@ -229,6 +230,15 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	 * @see #getResourceLoader()
 	 * @see #loadBeanDefinitions(org.springframework.core.io.Resource)
 	 * @see #loadBeanDefinitions(org.springframework.core.io.Resource[])
+	 */
+
+	/*
+	从指定的资源位置加载bean的定义。
+	位置也可以是位置模式，前提是这个 bean 定义阅读器的 ResourceLoader 是一个 ResourcePatternResolver。
+
+	入参
+	location – 资源位置，用这个 bean 定义阅读器的 ResourceLoader（或 ResourcePatternResolver）加载
+	actualResources – 一个 Set，用于填充在加载过程中已解析的实际 Resource 对象。 可能为null表示调用者对这些 Resource 对象不感兴趣。
 	 */
 	public int loadBeanDefinitions(String location, @Nullable Set<Resource> actualResources) throws BeanDefinitionStoreException {
 		ResourceLoader resourceLoader = getResourceLoader();

@@ -93,6 +93,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 
 		// Allow a subclass to provide custom initialization of the reader,
 		// then proceed with actually loading the bean definitions.
+		// 允许子类提供阅读器的自定义初始化，然后继续实际加载bean定义
 		initBeanDefinitionReader(beanDefinitionReader);
 		loadBeanDefinitions(beanDefinitionReader);
 	}
@@ -121,7 +122,13 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 * @see #getResources
 	 * @see #getResourcePatternResolver
 	 */
+
+	/*
+	使用给定的 XmlBeanDefinitionReader 加载 bean 定义。
+	bean 工厂的生命周期由refreshBeanFactory方法处理； 因此，此方法仅用于加载和/或注册 bean 定义。
+	 */
 	protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
+		// ClassPathXmlApplicationContext#getConfigResources
 		Resource[] configResources = getConfigResources();
 		if (configResources != null) {
 			reader.loadBeanDefinitions(configResources);
@@ -139,6 +146,11 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 * this to provide pre-built Resource objects rather than location Strings.
 	 * @return an array of Resource objects, or {@code null} if none
 	 * @see #getConfigLocations()
+	 */
+
+	/*
+	返回一个 Resource 对象数组，引用该上下文应该使用的 XML bean 定义文件。
+	默认实现返回null 。 子类可以覆盖它以提供预先构建的资源对象而不是位置字符串
 	 */
 	@Nullable
 	protected Resource[] getConfigResources() {

@@ -98,6 +98,11 @@ public abstract class AbstractRefreshableConfigApplicationContext extends Abstra
 	 * @see #getResources
 	 * @see #getResourcePatternResolver
 	 */
+
+	/*
+	返回一个资源位置数组，指的是构建此上下文时应使用的 XML bean 定义文件。 还可以包括位置模式，这将通过 ResourcePatternResolver 解决。
+	默认实现返回null 。 子类可以覆盖它以提供一组资源位置来加载 bean 定义。
+	 */
 	@Nullable
 	protected String[] getConfigLocations() {
 		return (this.configLocations != null ? this.configLocations : getDefaultConfigLocations());
@@ -110,6 +115,11 @@ public abstract class AbstractRefreshableConfigApplicationContext extends Abstra
 	 * requiring explicit config locations.
 	 * @return an array of default config locations, if any
 	 * @see #setConfigLocations
+	 */
+
+	/*
+	对于未指定显式配置位置的情况，返回要使用的默认配置位置。
+	默认实现返回null ，需要明确的配置位置。
 	 */
 	@Nullable
 	protected String[] getDefaultConfigLocations() {

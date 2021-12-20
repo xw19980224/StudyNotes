@@ -141,6 +141,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 		// 初始化父类
 		super(parent);
 		// 设置本地的配置信息
+		// 处理配置文件路径
 		setConfigLocations(configLocations);
 		// 完成Spring容器的初始化
 		if (refresh) {
@@ -209,6 +210,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	@Override
 	@Nullable
 	protected Resource[] getConfigResources() {
+		// this.configResources:Resource[]
 		return this.configResources;
 	}
 
