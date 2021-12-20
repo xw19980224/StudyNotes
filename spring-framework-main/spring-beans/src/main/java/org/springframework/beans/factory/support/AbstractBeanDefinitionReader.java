@@ -90,7 +90,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	如果给定一个普通的BeanDefinitionRegistry，
 	默认的ResourceLoader将会是一个PathMatchingResourcePatternResolver
 	如果传入的bean工厂也实现了EnvironmentCapable,那么这个读者将使用它的环境。
-	否则，阅读器将初始化并使用StandardEnvironment 。
+	否则，读取器将初始化并使用StandardEnvironment 。
 	所有 ApplicationContext 实现都是 EnvironmentCapable，而普通的 BeanFactory 实现则不是。
 	 */
 	protected AbstractBeanDefinitionReader(BeanDefinitionRegistry registry) {
@@ -234,23 +234,27 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 
 	/*
 	从指定的资源位置加载bean的定义。
-	位置也可以是位置模式，前提是这个 bean 定义阅读器的 ResourceLoader 是一个 ResourcePatternResolver。
+	位置也可以是位置模式，前提是这个 bean 定义读取器的 ResourceLoader 是一个 ResourcePatternResolver。
 
 	入参
-	location – 资源位置，用这个 bean 定义阅读器的 ResourceLoader（或 ResourcePatternResolver）加载
+	location – 资源位置，用这个 bean 定义读取器的 ResourceLoader（或 ResourcePatternResolver）加载
 	actualResources – 一个 Set，用于填充在加载过程中已解析的实际 Resource 对象。 可能为null表示调用者对这些 Resource 对象不感兴趣。
 	 */
 	public int loadBeanDefinitions(String location, @Nullable Set<Resource> actualResources) throws BeanDefinitionStoreException {
+		// 获取上下文的资源加载器
 		ResourceLoader resourceLoader = getResourceLoader();
 		if (resourceLoader == null) {
 			throw new BeanDefinitionStoreException(
 					"Cannot load bean definitions from location [" + location + "]: no ResourceLoader available");
 		}
 
+		// 判断资源加载器是否是 ResourcePatternResolver 类型（Xml、URL等不同类型统一接口为匹配模式）
 		if (resourceLoader instanceof ResourcePatternResolver) {
 			// Resource pattern matching available.
 			try {
+				// 统一加载转换为Resource资源对象
 				Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);
+				// 加载资源中配置的BeanDefinition对象，并返回数量
 				int count = loadBeanDefinitions(resources);
 				if (actualResources != null) {
 					Collections.addAll(actualResources, resources);
@@ -283,6 +287,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	public int loadBeanDefinitions(String... locations) throws BeanDefinitionStoreException {
 		Assert.notNull(locations, "Location array must not be null");
 		int count = 0;
+		// 如果有多个配置文件，循环读取加载，并统计总共加载了多少个BeanDefinition
 		for (String location : locations) {
 			count += loadBeanDefinitions(location);
 		}
