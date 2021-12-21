@@ -1740,7 +1740,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * @see #invokeInitMethods
 	 * @see #applyBeanPostProcessorsAfterInitialization
 	 */
+
+	/*
+	初始化给定的bean实例，应用工程回调以及初始化方法和bean后处理器。
+	对于传统定义的bean从createBean调用，对于现有bean实例从initializeBean调用。
+	 */
 	protected Object initializeBean(String beanName, Object bean, @Nullable RootBeanDefinition mbd) {
+		// 调用Aware方法
 		invokeAwareMethods(beanName, bean);
 
 		Object wrappedBean = bean;
@@ -1749,6 +1755,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
+			// 调用初始化方法
 			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {
