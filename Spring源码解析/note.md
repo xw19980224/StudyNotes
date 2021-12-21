@@ -43,3 +43,59 @@ Spring提供了两种后置处理Bean的拓展接口，分别为 BeanPostProcess
 
 
 SpringBean的生命周期
+
+### BeanDefinition加载解析及注册子流程
+
+入口：org.springframework.context.support.**AbstractApplicationContext**#**obtainFreshBeanFactory**
+
+真正执行BeanDefinition加载：
+
+org.springframework.context.support.**AbstractRefreshableApplicationContext**#**loadBeanDefinitions**
+
+- org.springframework.context.support.**AbstractXmlApplicationContext**#**loadBeanDefinitions(DefaultListableBeanFactory)**
+
+- org.springframework.context.support.**AbstractXmlApplicationContext**#**loadBeanDefinitions(XmlBeanDefinitionReader)**
+
+  - org.springframework.beans.factory.support.**AbstractBeanDefinitionReader**#**loadBeanDefinitions(String ...)**
+
+  - org.springframework.beans.factory.support.**AbstractBeanDefinitionReader**#**loadBeanDefinitions(String)**
+
+  - org.springframework.beans.factory.support.**AbstractBeanDefinitionReader**#**loadBeanDefinitions**( **String**, **Set<Resource>**)
+
+  - org.springframework.beans.factory.support.**AbstractBeanDefinitionReader**#**loadBeanDefinitions**(**Resource**...)
+
+    - org.springframework.beans.factory.xml.**XmlBeanDefinitionReader**#**loadBeanDefinitions**(Resource)
+
+    - org.springframework.beans.factory.xml.**XmlBeanDefinitionReader**#**loadBeanDefinitions**(**EncodedResource**)
+
+    - org.springframework.beans.factory.xml.**XmlBeanDefinitionReader**#**doLoadBeanDefinitions**
+
+    - 读取xml为document对象完成
+
+    - org.springframework.beans.factory.xml.**XmlBeanDefinitionReader**#**registerBeanDefinitions**  (开始注册)
+
+      - org.springframework.beans.factory.xml.**DefaultBeanDefinitionDocumentReader**#**registerBeanDefinitions**
+
+      - org.springframework.beans.factory.xml.**DefaultBeanDefinitionDocumentReader**#**doRegisterBeanDefinitions**
+
+      - org.springframework.beans.factory.xml.**DefaultBeanDefinitionDocumentReader**#**parseBeanDefinitions**
+
+      - org.springframework.beans.factory.xml.**DefaultBeanDefinitionDocumentReader**#**parseDefaultElement**
+
+      - org.springframework.beans.factory.xml.**DefaultBeanDefinitionDocumentReader**#**processBeanDefinition**
+
+        - org.springframework.beans.factory.support.**BeanDefinitionReaderUtils**#**registerBeanDefinition**
+
+          - org.springframework.beans.factory.support.**DefaultListableBeanFactory**#**registerBeanDefinition**
+
+          
+
+### Bean加载流程
+
+入口org.springframework.context.support.**AbstractApplicationContext**#**finishBeanFactoryInitialization**
+
+- org.springframework.context.support.**AbstractApplicationContext**#**finishBeanFactoryInitialization**
+  - org.springframework.beans.factory.support.**DefaultListableBeanFactory**#**preInstantiateSingletons**
+    - org.springframework.beans.factory.support.**AbstractBeanFactory**#**getBean**(**String**)
+    - org.springframework.beans.factory.support.**AbstractBeanFactory**#**doGetBean**
+      - org.springframework.beans.factory.support.**DefaultSingletonBeanRegistry**#**getSingleton**(String, ObjectFactory<?>)

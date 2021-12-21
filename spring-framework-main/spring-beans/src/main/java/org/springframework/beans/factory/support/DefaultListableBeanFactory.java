@@ -140,13 +140,16 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			new ConcurrentHashMap<>(8);
 
 	/** Optional id for this factory, for serialization purposes. */
+	// 此工厂的可选ID，用于序列化目的。
 	@Nullable
 	private String serializationId;
 
 	/** Whether to allow re-registration of a different definition with the same name. */
+	// 是否允许重新注册具有相同名称的不同定义
 	private boolean allowBeanDefinitionOverriding = true;
 
 	/** Whether to allow eager class loading even for lazy-init beans. */
+	// 是否允许加载bean，即使是懒惰性初始化bean
 	private boolean allowEagerClassLoading = true;
 
 	/** Optional OrderComparator for dependency Lists and arrays. */
@@ -154,12 +157,14 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private Comparator<Object> dependencyComparator;
 
 	/** Resolver to use for checking if a bean definition is an autowire candidate. */
+	// 用于检查 bean 定义是否是自动装配候选者的解析器。
 	private AutowireCandidateResolver autowireCandidateResolver = SimpleAutowireCandidateResolver.INSTANCE;
 
 	/** Map from dependency type to corresponding autowired value. */
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
 	/** Map of bean definition objects, keyed by bean name. */
+	// bean 定义对象的映射，以 bean 名称为键。
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 
 	/** Map from bean name to merged BeanDefinitionHolder. */
@@ -172,9 +177,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	private final Map<Class<?>, String[]> singletonBeanNamesByType = new ConcurrentHashMap<>(64);
 
 	/** List of bean definition names, in registration order. */
+	// bean 定义名称列表，按注册顺序排列
 	private volatile List<String> beanDefinitionNames = new ArrayList<>(256);
 
 	/** List of names of manually registered singletons, in registration order. */
+	// 手动注册的单例名称列表，按注册顺序排列
 	private volatile Set<String> manualSingletonNames = new LinkedHashSet<>(16);
 
 	/** Cached array of bean definition names in case of frozen configuration. */
@@ -911,20 +918,25 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	@Override
 	public void preInstantiateSingletons() throws BeansException {
-		if (logger.isTraceEnabled()) {
+			if (logger.isTraceEnabled()) {
 			logger.trace("Pre-instantiating singletons in " + this);
 		}
 
 		// Iterate over a copy to allow for init methods which in turn register new bean definitions.
 		// While this may not be part of the regular factory bootstrap, it does otherwise work fine.
+		// 所有bean的名字
 		List<String> beanNames = new ArrayList<>(this.beanDefinitionNames);
 
 		// Trigger initialization of all non-lazy singleton beans...
+		// 触发所有非延迟加载单例bean的初始化，主要步骤为getBean
 		for (String beanName : beanNames) {
+			// 合并夫BeanDefinition对象
+			// map.get(beanName)
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				if (isFactoryBean(beanName)) {
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
+					// 如果是FactoryBean则加&
 					if (bean instanceof FactoryBean<?> factory) {
 						boolean isEagerInit = (factory instanceof SmartFactoryBean &&
 								((SmartFactoryBean<?>) factory).isEagerInit());
@@ -934,6 +946,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 				}
 				else {
+					// 实例化当前bean
 					getBean(beanName);
 				}
 			}
