@@ -124,7 +124,7 @@ Spring中循环依赖场景有：
 循环依赖的处理机制：
 
 - 单例 bean 构造器参数循环依赖（无法解决）：构造器在初始化时需要赋值，而参数并未进行初始化。
-- prototype 原型 bean 循环依赖（无法解决）org.springframework.beans.factory.support.AbstractBeanFactory#doGetBean --->**isPrototypeCurrentlyInCreation**
+- prototype 原型 bean 循环依赖（无法解决）org.springframework.beans.factory.support.AbstractBeanFactory#doGetBean ---> **isPrototypeCurrentlyInCreation**
 - 单例bean通过setXxx或者@Autowired进⾏循环依赖
 
 
