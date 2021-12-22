@@ -537,6 +537,10 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Return whether this bean is "abstract", i.e. not meant to be instantiated
 	 * itself but rather just serving as parent for concrete child bean definitions.
 	 */
+
+	/*
+	返回此 bean 是否是“抽象的”，即不打算将其自身实例化，而只是作为具体子 bean 定义的父级。
+	 */
 	@Override
 	public boolean isAbstract() {
 		return this.abstractFlag;
@@ -556,6 +560,10 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * Return whether this bean should be lazily initialized, i.e. not
 	 * eagerly instantiated on startup. Only applicable to a singleton bean.
 	 * @return whether to apply lazy-init semantics ({@code false} by default)
+	 */
+
+	/*
+	返回这个 bean 是否应该被延迟初始化，即在启动时不急切地实例化。 仅适用于单例 bean
 	 */
 	@Override
 	public boolean isLazyInit() {

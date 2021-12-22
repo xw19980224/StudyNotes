@@ -99,3 +99,46 @@ org.springframework.context.support.**AbstractRefreshableApplicationContext**#**
     - org.springframework.beans.factory.support.**AbstractBeanFactory**#**getBean**(**String**)
     - org.springframework.beans.factory.support.**AbstractBeanFactory**#**doGetBean**
       - org.springframework.beans.factory.support.**DefaultSingletonBeanRegistry**#**getSingleton**(String, ObjectFactory<?>)
+
+
+
+### Spring循环依赖问题：
+
+#### 什么是循环依赖？
+
+​	循环依赖其实就是循环引⽤，也就是两个或者两个以上的 Bean 互相持有对⽅，最终形成闭环。⽐如A
+
+依赖于B，B依赖于C，C⼜依赖于A。
+
+![](C:\workspase\StudyNotes\Spring源码解析\循环依赖.png)
+
+Spring中循环依赖场景有：
+
+- 构造器的循环依赖（构造器注入）：无法解决，只能抛出 BeanCurrentlyCreationException 异常
+- Field属性的循环依赖（Set注入）
+
+在解决属性循环依赖时，Spring采用的是提前暴露对象的方法。
+
+
+
+循环依赖的处理机制：
+
+- 单例 bean 构造器参数循环依赖（无法解决）：构造器在初始化时需要赋值，而参数并未进行初始化。
+- prototype 原型 bean 循环依赖（无法解决）org.springframework.beans.factory.support.AbstractBeanFactory#doGetBean --->**isPrototypeCurrentlyInCreation**
+- 单例bean通过setXxx或者@Autowired进⾏循环依赖
+
+
+
+三级缓存：
+
+- 一级:单例池
+- 二级:
+- 三级
+
+A在对象实例化完成之后，立马将SpringBean A放入三级缓存（提前暴露自己）
+
+B在创建过程中发现依赖于A，那么去三级缓存使用尚未成型的Bean A。升级放到二级缓存。升级过程中可以进行一些拓展操作。
+
+B创建完成之后会放入一级缓存。
+
+A创建时，就可以使用一级缓存中的Bean B了。

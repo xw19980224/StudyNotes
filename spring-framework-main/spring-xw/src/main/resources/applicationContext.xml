@@ -9,6 +9,8 @@
         https://www.springframework.org/schema/aop/spring-aop.xsd
 ">
 
+<!--	<bean id="myBean" class="com.lagou.edu.MyBean" lazy-init="true"/>-->
+
 	<!--循环依赖问题-->
 	<bean id="lagouBean" class="com.lagou.edu.LagouBean">
 		<property name="ItBean" ref="itBean"/>
@@ -18,8 +20,8 @@
 	</bean>
 
 
-	<bean id="myBeanFactoryPostProcessor" class="com.lagou.edu.MyBeanFactoryPostProcessor"/>
-	<bean id="myBeanPostProcessor" class="com.lagou.edu.MyBeanPostProcessor"/>
+<!--	<bean id="myBeanFactoryPostProcessor" class="com.lagou.edu.MyBeanFactoryPostProcessor"/>-->
+<!--	<bean id="myBeanPostProcessor" class="com.lagou.edu.MyBeanPostProcessor"/>-->
 
 
 	<!--<bean id="lagouBean" class="com.lagou.edu.LagouBean">

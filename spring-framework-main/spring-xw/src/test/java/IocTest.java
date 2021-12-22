@@ -1,4 +1,5 @@
 import com.lagou.edu.LagouBean;
+import com.lagou.edu.MyBean;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

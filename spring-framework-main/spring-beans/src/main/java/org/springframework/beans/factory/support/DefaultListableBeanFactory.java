@@ -933,6 +933,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			// 合并夫BeanDefinition对象
 			// map.get(beanName)
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
+			// 判断是否不是“抽象的”、是否是单例的、是否不是懒加载的
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
 				if (isFactoryBean(beanName)) {
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
