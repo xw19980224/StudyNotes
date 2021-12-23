@@ -79,19 +79,24 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
 	/** Cache of singleton factories: bean name to ObjectFactory. */
+	// 单例工厂的缓存：bean 名称到 ObjectFactory
 	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
 
 	/** Cache of early singleton objects: bean name to bean instance. */
+	// 早期单例对象的缓存：bean 名称到 bean 实例
 	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
 
 	/** Set of registered singletons, containing the bean names in registration order. */
+	// 被注册的单例集合，包含按注册顺序排列的bean名称。
 	private final Set<String> registeredSingletons = new LinkedHashSet<>(256);
 
 	/** Names of beans that are currently in creation. */
+	// 包含按注册顺序排列的 bean 名称。
 	private final Set<String> singletonsCurrentlyInCreation =
 			Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
 	/** Names of beans currently excluded from in creation checks. */
+	// 当前从创建检查中排除的bean的名称。
 	private final Set<String> inCreationCheckExclusions =
 			Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
@@ -138,6 +143,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param beanName the name of the bean
 	 * @param singletonObject the singleton object
 	 */
+
+	/*
+	将给定的单例对象添加到该工厂的单例缓存中
+	被要求立即注册单例
+	 */
 	protected void addSingleton(String beanName, Object singletonObject) {
 		synchronized (this.singletonObjects) {
 			this.singletonObjects.put(beanName, singletonObject);
@@ -154,6 +164,11 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * resolve circular references.
 	 * @param beanName the name of the bean
 	 * @param singletonFactory the factory for the singleton object
+	 */
+
+	/*
+	如果必要，添加给定的单例工厂为了构建指定的单例。
+	被要求立即注册单例，有能力去解决循环依赖
 	 */
 	protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFactory) {
 		Assert.notNull(singletonFactory, "Singleton factory must not be null");
@@ -225,6 +240,10 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * with, if necessary
 	 * @return the registered singleton object
 	 */
+
+	/*
+	返回以给定名称注册的（原始）单例对象，如果尚未注册，则创建并注册一个新对象。
+	 */
 	public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
 		Assert.notNull(beanName, "Bean name must not be null");
 		synchronized (this.singletonObjects) {
@@ -234,7 +253,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				if (this.singletonsCurrentlyInDestruction) {
 					throw new BeanCreationNotAllowedException(beanName,
 							"Singleton bean creation not allowed while singletons of this factory are in destruction " +
-							"(Do not request a bean from a BeanFactory in a destroy method implementation!)");
+									"(Do not request a bean from a BeanFactory in a destroy method implementation!)");
 				}
 				if (logger.isDebugEnabled()) {
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
@@ -651,3 +670,9 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	}
 
 }
+
+
+
+
+
+
