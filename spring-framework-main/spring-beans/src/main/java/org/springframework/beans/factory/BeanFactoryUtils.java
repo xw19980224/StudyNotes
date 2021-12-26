@@ -80,7 +80,7 @@ public abstract class BeanFactoryUtils {
 	 */
 
 	/*
-		返回实际 bean 名称，
+		返回实际 bean  名称,
 	 */
 	public static String transformedBeanName(String name) {
 		Assert.notNull(name, "'name' must not be null");

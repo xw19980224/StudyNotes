@@ -11,33 +11,33 @@
 
 <!--	<bean id="myBean" class="com.lagou.edu.MyBean" lazy-init="true"/>-->
 
-	<!--循环依赖问题-->
-	<bean id="lagouBean" class="com.lagou.edu.LagouBean">
-		<property name="ItBean" ref="itBean"/>
-	</bean>
-	<bean id="itBean" class="com.lagou.edu.ItBean">
-		<property name="LagouBean" ref="lagouBean"/>
-	</bean>
+<!--	&lt;!&ndash;循环依赖问题&ndash;&gt;-->
+<!--	<bean id="lagouBean" class="com.lagou.edu.LagouBean">-->
+<!--		<property name="ItBean" ref="itBean"/>-->
+<!--	</bean>-->
+<!--	<bean id="itBean" class="com.lagou.edu.ItBean">-->
+<!--		<property name="LagouBean" ref="lagouBean"/>-->
+<!--	</bean>-->
 
 
 <!--	<bean id="myBeanFactoryPostProcessor" class="com.lagou.edu.MyBeanFactoryPostProcessor"/>-->
 <!--	<bean id="myBeanPostProcessor" class="com.lagou.edu.MyBeanPostProcessor"/>-->
 
 
-	<!--<bean id="lagouBean" class="com.lagou.edu.LagouBean">
-	</bean>-->
+	<bean id="lagouBean" class="com.lagou.edu.LagouBean">
+	</bean>
 
 
 	<!--aop配置-->
 	<!--横切逻辑-->
-	<!--<bean id="logUtils" class="com.lagou.edu.LogUtils">
+	<bean id="logUtils" class="com.lagou.edu.LogUtils">
 	</bean>
 
 	<aop:config>
 		<aop:aspect ref="logUtils">
 			<aop:before method="beforeMethod" pointcut="execution(public void com.lagou.edu.LagouBean.print())"/>
 		</aop:aspect>
-	</aop:config>-->
+	</aop:config>
 
 
 </beans>
