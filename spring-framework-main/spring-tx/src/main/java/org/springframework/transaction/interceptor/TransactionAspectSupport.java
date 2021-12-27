@@ -337,8 +337,10 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			final InvocationCallback invocation) throws Throwable {
 
 		// If the transaction attribute is null, the method is non-transactional.
+		// 获取属性解析器，既在ProxyTransactionManagementConfiguration容器配置类中注册事务拦截器时注入的
 		TransactionAttributeSource tas = getTransactionAttributeSource();
 		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
+		// 获取事务管理器
 		final TransactionManager tm = determineTransactionManager(txAttr);
 
 		if (this.reactiveAdapterRegistry != null && tm instanceof ReactiveTransactionManager) {
@@ -389,6 +391,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			}
 			catch (Throwable ex) {
 				// target invocation exception
+				// 如果目标方法抛出异常，会执行completeTransactionAfterThrowing（获取事务管理器，执行回滚操作）
 				completeTransactionAfterThrowing(txInfo, ex);
 				throw ex;
 			}
@@ -403,7 +406,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 					retVal = VavrDelegate.evaluateTryFailure(retVal, txAttr, status);
 				}
 			}
-
+			// 如果目标方法正常运行，则会执行commitTransactionAfterReturning（获取事务管理器，执行提交事务操作）
 			commitTransactionAfterReturning(txInfo);
 			return retVal;
 		}
