@@ -320,5 +320,5 @@ public class SpringConfiguration {
     - 属性解析器：`AnnotationTransactionAttributeSource`，内部持有一个解析器集合`Set<TransactionAnnotationParser> annotationParsers;`具体使用的是`SpringTransactionAnnotationParser`解析器，用来解析`@Transactional`的事务
     - 事务拦截器：
       - `TransactionInterceptor`实现了`MethodInterceptor`接口，该通用拦截会在产生代理对象之前和aop增强合并，最终 一起影响到代理对象
-      - `TransactionInterceptor`的invoke方法中`invokeWithinTransaction`会触发原有业务逻辑调用。
+      - `TransactionInterceptor`的invoke方法中`invokeWithinTransaction`会触发原有业务逻辑调用（增强事务）。
 
