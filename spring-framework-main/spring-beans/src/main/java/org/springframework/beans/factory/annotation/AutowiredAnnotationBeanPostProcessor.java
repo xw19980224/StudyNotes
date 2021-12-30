@@ -255,7 +255,9 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		//获取加了@Autowired的元信息数据
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
+		//将beanDefinition里Autowired相关信息添加到checkedElements里面，后面会用到。
 		metadata.checkConfigMembers(beanDefinition);
 	}
 
